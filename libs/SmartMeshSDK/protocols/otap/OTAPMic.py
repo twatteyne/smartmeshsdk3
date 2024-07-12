@@ -66,16 +66,16 @@ crctab = [
       0x7bc7, 0x6a4e, 0x58d5, 0x495c, 0x3de3, 0x2c6a, 0x1ef1, 0x0f78 ]
 
 def calcFCS(msg):
-   fcs = 0xffff
-   
-   for b in msg:
-      try:
-      c = struct.unpack('B', b)[0]
-      except TypeError:
-          c = struct.unpack('B', bytes([b]))[0]
-      fcs = (fcs >> 8) ^ crctab[(fcs ^ c) & 0xff]
+    fcs = 0xffff
 
-   return ~fcs & 0xFFFF
+    for b in msg:
+        try:
+            c = struct.unpack('B', b)[0]
+        except TypeError:
+            c = struct.unpack('B', bytes([b]))[0]
+        fcs = (fcs >> 8) ^ crctab[(fcs ^ c) & 0xff]
+
+    return ~fcs & 0xFFFF
 
 
 def getFCS(msg):

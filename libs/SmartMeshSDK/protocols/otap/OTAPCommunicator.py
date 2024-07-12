@@ -241,6 +241,13 @@ class OTAPCommunicator(object):
         log.info('Got Status response from %s' % print_mac(mac))
         log.debug('Data: ' + ' '.join(['%02X' % ord(b) for b in cmd_data]))
         os_resp = OtapStatusResp()
+
+        if isinstance(cmd_data, str):
+            # convert the str to bytes using latin-1, because all Unicode codepoints from 0x00 through to 0xFF
+            # are mapped one-on-one to bytes with the same value.
+            # This is equivalent to: `cmd_data = bytearray(map(ord, cmd_data))`
+            cmd_data = cmd_data.encode('latin-1')
+
         os_resp.parse(cmd_data)
         log.debug(str(os_resp))
 
